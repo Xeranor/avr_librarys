@@ -1,0 +1,48 @@
+
+mcu = atmega328p
+baud = 9600
+cpu_clock = 16000000UL
+target = test
+
+builddir = build
+sourcedir = src
+includedir = include
+
+lib_header = ../../include
+lib_source = ../../src
+
+cc = avr-gcc
+cpflags = -DF_CPU=$cpu_clock -DBAUD=$baud -mmcu=$mcu -I$includedir -I$lib_header
+cflags = -Os -g -std=gnu99 -Wall
+
+ldflags = -Wl,-Map,$builddir/$target.map -Wl,--gc-sections -mmcu=$mcu
+
+rule c
+  command = $cc $cflags $cpflags -c $in -o $out
+  description = c $out
+
+rule link
+  command = $cc $ldflags -o $out $in $libs
+  description = linking $out
+
+rule hex
+  command = avr-objcopy -j .text -j .data -O ihex $in $out
+  description = generating hex $out
+
+rule flash
+  command = avrdude -c usbasp -p $mcu -U flash:w:$in
+  description = flashing $in
+
+rule size
+  command = avr-size -C --mcu=$mcu $in
+
+
+build $builddir/main.o: c $sourcedir/main.c
+
+build $builddir/$target.elf: link $builddir/main.o
+
+build $builddir/$target.hex: hex $builddir/$target.elf
+build program: flash $builddir/$target.hex
+build size: size $builddir/$traget.elf
+
+default program
