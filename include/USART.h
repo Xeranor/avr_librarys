@@ -1,3 +1,6 @@
+#include <util/setbaud.h>
+#include <avr/io.h>
+
 void usart_init(void);
 void usart_transmit_byte(unsigned char data);
 void usart_transmit_str(char *str);

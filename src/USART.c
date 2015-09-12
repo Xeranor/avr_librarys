@@ -1,6 +1,4 @@
-#include <avr/io.h>
 #include "USART.h"
-#include <util/setbaud.h>
 
 void usart_init(void){
 	UBRR0H = UBRRH_VALUE;
