@@ -1,5 +1,6 @@
 #include <util/setbaud.h>
 #include <avr/io.h>
+#include "USART_config.h"
 
 void usart_init(void);
 void usart_transmit_byte(unsigned char data);

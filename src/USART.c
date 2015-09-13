@@ -4,6 +4,9 @@ void usart_init(void){
 	UBRR0H = UBRRH_VALUE;
 	UBRR0L = UBRRL_VALUE;
 
+	PORT_RX &= ~(1<<BIT_RX);
+	PORT_TX |= (1<<BIT_TX);
+
 	UCSR0B = (1<<RXEN0) | (1<<TXEN0);
 	UCSR0C = (1<<UCSZ00) | (1 << UCSZ01);
 }
